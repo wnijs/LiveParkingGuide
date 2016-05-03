@@ -20,13 +20,15 @@ import java.util.ArrayList;
 /**
  * Created by wannesnijs on 3/05/16.
  */
-public class HelperFuncions {
+public class HelperFunctions {
 
     Context context;
 
     private String url;
 
-    public HelperFuncions (Context context) {
+    private ArrayList<Parking> parkings = new ArrayList<>();
+
+    public HelperFunctions(Context context) {
         this.context = context;
         url = context.getResources().getString(R.string.url);
     }
@@ -44,21 +46,36 @@ public class HelperFuncions {
                     builder.append(stream);
                 }
                 Log.d("JSON","JSON: " + builder.toString());
+
+                //JSONObject response = new JSONObject(builder.toString());
+                //JSONArray parkingsArray = response.getJSONArray("");
+
+
                 return new JSONArray(builder.toString());
             }
         } catch(MalformedURLException e) {
-            Log.e("JSON", e.getMessage());
+            Log.e("JSON Malformed URL", e.getMessage());
         } catch (IOException e) {
-            Log.e("JSON", e.getMessage());
+            Log.e("JSON IO", e.getMessage());
         } catch (JSONException e) {
-            Log.e("JSON", e.getMessage());
+            Log.e("JSON exception", e.getMessage());
         }
         return null;
     }
 
-    public boolean separateJSON(JSONArray jsonObject) throws JSONException{
-        if(jsonObject != null) {
-
+    public boolean separateJSON(JSONArray jsonArray) throws JSONException{
+        if(jsonArray != null) {
+            for(int i = 0; i < jsonArray.length(); i++) {
+                JSONObject parking = jsonArray.getJSONObject(i);
+                //String parkingName = parking.toString();
+                //System.out.println(parkingName);
+                Parking newParking = new Parking(parking.getString("name"),
+                        parking.getString("address"), parking.getString("contactInfo"),
+                        parking.getInt("totalCapacity"),
+                        parking.getJSONObject("parkingStatus").getInt("availableCapacity"));
+                System.out.println(newParking.getName() + ": " + newParking.getAvailableCapacity());
+                parkings.add(newParking);
+            }
         }
         return false;
     }

@@ -10,19 +10,13 @@ import android.widget.ListView;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     ListView lv;
     Context context;
 
-    HelperFuncions helper;
-
-    ArrayList parkings;
-
-    public static String[] parkingNames = {"Kouter", "Zuid"};
-    public static int[] parkingSpaces = {25, 201};
+    HelperFunctions helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            helper = new HelperFuncions(context);
+            helper = new HelperFunctions(context);
             try {
                 return helper.separateJSON(helper.makeRequest());
             } catch (JSONException e) {
