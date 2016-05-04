@@ -64,6 +64,7 @@ public class MainFragment extends Fragment {
         } catch (NullPointerException e) {
             Log.e("VIEW", e.getMessage());
         }
+        while(main.adapter == null) {}
         lv.setAdapter(main.adapter);
     }
 
@@ -78,6 +79,7 @@ public class MainFragment extends Fragment {
                 main.updateAdapter();
             }
         }, 0, 4000);
+
     }
 
     @Override
@@ -92,9 +94,10 @@ public class MainFragment extends Fragment {
             try {
                 boolean result = helper.InitialCast(helper.makeRequest());
                 main.dataLoaded = true;
+                main.newAdapter();
                 return result;
             } catch (JSONException e) {
-                Log.e("JSON",e.getMessage());
+                Log.e("JSON", e.getMessage());
             }
             return false;
         }
@@ -108,7 +111,7 @@ public class MainFragment extends Fragment {
                 main.dataLoaded = true;
                 return result;
             } catch (JSONException e) {
-                Log.e("JSON",e.getMessage());
+                Log.e("JSON", e.getMessage());
             }
             return false;
         }

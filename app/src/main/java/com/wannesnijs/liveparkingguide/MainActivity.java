@@ -1,25 +1,15 @@
 package com.wannesnijs.liveparkingguide;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.os.AsyncTask;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ListView;
-
-import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
     Context context;
 
-    ListView lv;
     ParkingAdapter adapter;
     public MainActivity main = null;
     public ArrayList<Parking> parkings = new ArrayList<>();
@@ -32,7 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
         main = this;
         context = this;
-        while(!dataLoaded) {}
+    }
+
+    public void newAdapter() {
         adapter = new ParkingAdapter(main, parkings, getResources());
     }
 
@@ -40,13 +32,16 @@ public class MainActivity extends AppCompatActivity {
         Parking temp = parkings.get(mPosition);
         System.out.println(temp.getName() + " clicked");
         //TODO: fragment opstarten
+
     }
 
     public void updateAdapter() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                adapter.notifyDataSetChanged();
+                if(adapter != null) {
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
     }
