@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
         main = this;
         context = this;
+
+        MainFragment mainFragment = new MainFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mainFragment).commit();
     }
 
     public void newAdapter() {
@@ -31,8 +34,15 @@ public class MainActivity extends AppCompatActivity {
     public void onItemClick(int mPosition) {
         Parking temp = parkings.get(mPosition);
         System.out.println(temp.getName() + " clicked");
-        //TODO: fragment opstarten
-
+        ParkingFragment parkingFragment = new ParkingFragment();
+        Bundle args = new Bundle();
+        args.putInt("position", mPosition);
+        parkingFragment.setArguments(args);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, parkingFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     public void updateAdapter() {
