@@ -34,13 +34,13 @@ public class MainActivity extends AppCompatActivity {
     public void onItemClick(int mPosition) {
         Parking temp = parkings.get(mPosition);
         System.out.println(temp.getName() + " clicked");
-        ParkingFragment parkingFragment = new ParkingFragment();
+        DetailFragment detailFragment = new DetailFragment();
         Bundle args = new Bundle();
         args.putInt("position", mPosition);
-        parkingFragment.setArguments(args);
+        detailFragment.setArguments(args);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, parkingFragment)
+                .replace(R.id.fragment_container, detailFragment)
                 .addToBackStack(null)
                 .commit();
     }

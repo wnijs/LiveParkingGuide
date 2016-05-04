@@ -8,12 +8,4 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.wannesnijs.liveparkingguide.MainActivity">
-
-    <!--<fragment
-        android:name="com.wannesnijs.liveparkingguide.MainFragment"
-        android:id="@+id/main_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>-->
-
-</FrameLayout>
+    tools:context="com.wannesnijs.liveparkingguide.MainActivity"/>

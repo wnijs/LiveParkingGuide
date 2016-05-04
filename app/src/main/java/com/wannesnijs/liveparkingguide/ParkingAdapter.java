@@ -66,8 +66,8 @@ public class ParkingAdapter extends BaseAdapter implements DialogInterface.OnCli
 
             // View Holder Object to contain list_item.xml file elements
             holder = new ViewHolder();
-            holder.name = (TextView) vi.findViewById(R.id.textViewName);
-            holder.spaces = (TextView) vi.findViewById(R.id.textViewSpaces);
+            holder.name = (TextView) vi.findViewById(R.id.list_name);
+            holder.spaces = (TextView) vi.findViewById(R.id.list_spaces);
 
             // Set holder with LayoutInflater
             vi.setTag(holder);
