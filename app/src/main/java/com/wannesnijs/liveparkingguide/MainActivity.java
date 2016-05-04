@@ -3,6 +3,7 @@ package com.wannesnijs.liveparkingguide;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,10 +22,8 @@ public class MainActivity extends AppCompatActivity {
     ListView lv;
     ParkingAdapter adapter;
     public MainActivity main = null;
-    public ArrayList<Parking> parkings = new ArrayList<Parking>();
-    HelperFunctions helper;
+    public ArrayList<Parking> parkings = new ArrayList<>();
     boolean dataLoaded = false;
-    private Timer autoUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,38 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
         main = this;
         context = this;
-        Resources res = getResources();
-
-        helper = new HelperFunctions(main, getResources());
-        new initialRequest().execute();
         while(!dataLoaded) {}
-        lv = (ListView) findViewById(R.id.listview);
         adapter = new ParkingAdapter(main, parkings, getResources());
-        lv.setAdapter(adapter);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        autoUpdate = new Timer();
-        autoUpdate.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new updateRequest().execute();
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        }, 0, 4000);
-    }
-
-    @Override
-    public void onPause() {
-        autoUpdate.cancel();
-        super.onPause();
     }
 
     public void onItemClick(int mPosition) {
@@ -73,31 +42,13 @@ public class MainActivity extends AppCompatActivity {
         //TODO: fragment opstarten
     }
 
-    class initialRequest extends AsyncTask<Void, Void, Boolean> {
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                boolean result = helper.InitialCast(helper.makeRequest());
-                dataLoaded = true;
-                return result;
-            } catch (JSONException e) {
-                Log.e("JSON",e.getMessage());
+    public void updateAdapter() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
             }
-            return false;
-        }
+        });
     }
 
-    class updateRequest extends AsyncTask<Void, Void, Boolean> {
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                boolean result = helper.UpdateCast(helper.makeRequest());
-                dataLoaded = true;
-                return result;
-            } catch (JSONException e) {
-                Log.e("JSON",e.getMessage());
-            }
-            return false;
-        }
-    }
 }
