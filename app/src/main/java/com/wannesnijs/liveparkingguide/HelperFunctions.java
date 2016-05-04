@@ -2,7 +2,9 @@ package com.wannesnijs.liveparkingguide;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,15 +24,16 @@ import java.util.ArrayList;
  */
 public class HelperFunctions {
 
-    Context context;
+    MainActivity main;
+    Resources res;
 
     private String url;
 
-    private ArrayList<Parking> parkings = new ArrayList<>();
+    public HelperFunctions(MainActivity main, Resources res) {
+        this.main = main;
+        this.res = res;
 
-    public HelperFunctions(Context context) {
-        this.context = context;
-        url = context.getResources().getString(R.string.url);
+        url = main.getResources().getString(R.string.url);
     }
 
     public JSONArray makeRequest() {
@@ -47,10 +50,6 @@ public class HelperFunctions {
                 }
                 Log.d("JSON","JSON: " + builder.toString());
 
-                //JSONObject response = new JSONObject(builder.toString());
-                //JSONArray parkingsArray = response.getJSONArray("");
-
-
                 return new JSONArray(builder.toString());
             }
         } catch(MalformedURLException e) {
@@ -63,24 +62,31 @@ public class HelperFunctions {
         return null;
     }
 
-    public boolean separateJSON(JSONArray jsonArray) throws JSONException{
+    public boolean InitialCast(JSONArray jsonArray) throws JSONException{
         if(jsonArray != null) {
+            main.parkings = new ArrayList<Parking>();
             for(int i = 0; i < jsonArray.length(); i++) {
                 JSONObject parking = jsonArray.getJSONObject(i);
-                //String parkingName = parking.toString();
-                //System.out.println(parkingName);
                 Parking newParking = new Parking(parking.getString("name"),
                         parking.getString("address"), parking.getString("contactInfo"),
                         parking.getInt("totalCapacity"),
                         parking.getJSONObject("parkingStatus").getInt("availableCapacity"));
                 System.out.println(newParking.getName() + ": " + newParking.getAvailableCapacity());
-                parkings.add(newParking);
+                main.parkings.add(newParking);
             }
         }
         return false;
     }
 
-    public void updateScreen() {
-
+    public boolean UpdateCast(JSONArray jsonArray) throws JSONException{
+        if(jsonArray != null) {
+            for(int i = 0; i < jsonArray.length(); i++) {
+                JSONObject parking = jsonArray.getJSONObject(i);
+                main.parkings.get(i).updateCapacity(parking.getJSONObject("parkingStatus").getInt("availableCapacity"));
+                System.out.println(main.parkings.get(i).getName() + ": " + main.parkings.get(i).getAvailableCapacity());
+            }
+        }
+        return false;
     }
+
 }
