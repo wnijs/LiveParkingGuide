@@ -68,6 +68,8 @@ public class HelperFunctions {
             for(int i = 0; i < jsonArray.length(); i++) {
                 JSONObject parking = jsonArray.getJSONObject(i);
                 Parking newParking = new Parking(parking.getString("description"),
+                        parking.getDouble("latitude"),
+                        parking.getDouble("longitude"),
                         parking.getString("address"), parking.getString("contactInfo"),
                         parking.getInt("totalCapacity"),
                         parking.getJSONObject("parkingStatus").getInt("availableCapacity"));

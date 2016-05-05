@@ -1,6 +1,7 @@
 package com.wannesnijs.liveparkingguide;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     public MainActivity main = null;
     public ArrayList<Parking> parkings = new ArrayList<>();
     boolean dataLoaded = false;
+    public static FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         main = this;
         context = this;
+        fragmentManager = getSupportFragmentManager();
 
         MainFragment mainFragment = new MainFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mainFragment).commit();
