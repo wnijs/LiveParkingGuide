@@ -13,8 +13,9 @@ public class Parking {
     private String contact;
     private int totalCapacity;
     private int availableCapacity;
+    private float userDistance;
 
-    public Parking (String name, double latitude, double longitude, String address, String contact, int totalCapacity, int availableCapacity) {
+    public Parking(String name, double latitude, double longitude, String address, String contact, int totalCapacity, int availableCapacity, double userLatitude, double userLongitude) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -22,6 +23,9 @@ public class Parking {
         this.contact = contact;
         this.totalCapacity = totalCapacity;
         this.availableCapacity = availableCapacity;
+        float[] distance = new float[3];
+        Location.distanceBetween(latitude, longitude, userLatitude, userLongitude, distance);
+        userDistance = distance[0];
     }
 
     public String getName() {
@@ -50,6 +54,10 @@ public class Parking {
 
     public int getAvailableCapacity() {
         return availableCapacity;
+    }
+
+    public float getUserDistance() {
+        return userDistance;
     }
 
     public void updateCapacity (int availableCapacity) {

@@ -1,6 +1,7 @@
 package com.wannesnijs.liveparkingguide;
 
 import android.content.res.Resources;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,12 +26,22 @@ public class MainFragment extends Fragment {
     public MainActivity main = null;
     HelperFunctions helper;
     private Timer autoUpdate;
-    private Comparator<Parking> comparator = new Comparator<Parking>() {
+    private Comparator<Parking> nameComparator = new Comparator<Parking>() {
         @Override
         public int compare(Parking p1, Parking p2) {
             return p1.getName().compareTo(p2.getName());
         }
     };
+    private Comparator<Parking> distanceComparator = new Comparator<Parking>() {
+        @Override
+        public int compare(Parking p1, Parking p2) {
+            return new Float(p1.getUserDistance()).compareTo(new Float(p2.getUserDistance()));
+        }
+    };
+
+    private double userLatitude, userLongitude;
+    private boolean locationAvailable;
+    private int refreshTime = 20000;
 
     public MainFragment() {
         // Required empty public constructor
@@ -50,7 +61,7 @@ public class MainFragment extends Fragment {
         main = (MainActivity) getActivity();
         Resources res = getResources();
 
-        helper = new HelperFunctions(main, res);
+        helper = new HelperFunctions(main, this, res);
         new initialRequest().execute();
     }
 
@@ -87,7 +98,7 @@ public class MainFragment extends Fragment {
                 orderParkings();
                 main.updateAdapter();
             }
-        }, 0, 4000);
+        }, 0, refreshTime);
 
     }
 
@@ -97,9 +108,26 @@ public class MainFragment extends Fragment {
         super.onPause();
     }
 
+    public double getLatitude() {
+        return userLatitude;
+    }
+
+    public double getLongitude() {
+        return userLongitude;
+    }
+
     private void orderParkings() {
-        //TODO: if (location available) order by distance; else order alphabetically
-        Collections.sort(main.parkings, comparator);
+        if(locationAvailable) {
+            Collections.sort(main.parkings, distanceComparator);
+        } else {
+            Collections.sort(main.parkings, nameComparator);
+        }
+    }
+
+    public void updateLocation(double lat, double lon, boolean locationAvailable) {
+        userLatitude = lat;
+        userLongitude = lon;
+        this.locationAvailable = locationAvailable;
     }
 
     class initialRequest extends AsyncTask<Void, Void, Boolean> {

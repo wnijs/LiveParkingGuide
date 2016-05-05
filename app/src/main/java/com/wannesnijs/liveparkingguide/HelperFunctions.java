@@ -1,10 +1,15 @@
 package com.wannesnijs.liveparkingguide;
 
-import android.app.Fragment;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,15 +30,60 @@ import java.util.ArrayList;
 public class HelperFunctions {
 
     MainActivity main;
+    MainFragment fragment;
     Resources res;
 
-    private String url;
+    LocationManager locationManager;
+    LocationListener locationListener;
 
-    public HelperFunctions(MainActivity main, Resources res) {
+    private String url;
+    private boolean isGPSEnabled = false;
+
+    public HelperFunctions(MainActivity main, MainFragment frag, Resources res) {
         this.main = main;
+        this.fragment = frag;
         this.res = res;
 
         url = main.getResources().getString(R.string.url);
+
+        initLocationService(main.context);
+    }
+
+    private void initLocationService(final Context context) {
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                fragment.updateLocation(location.getLatitude(), location.getLongitude(), isGPSEnabled);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            @Override
+            public void onProviderEnabled(String provider) {}
+
+            @Override
+            public void onProviderDisabled(String provider) {}
+        };
+
+        if (Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        try {
+            fragment.updateLocation(0.0, 0.0, false);
+            this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            this.isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if(isGPSEnabled) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, (long)0, 0, locationListener);
+            }
+            if(locationManager != null) {
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                fragment.updateLocation(location.getLatitude(), location.getLongitude(), isGPSEnabled);
+            }
+        } catch (Exception e) {
+            Log.e("LOCATION", e.getMessage());
+        }
     }
 
     public JSONArray makeRequest() {
@@ -72,7 +122,9 @@ public class HelperFunctions {
                         parking.getDouble("longitude"),
                         parking.getString("address"), parking.getString("contactInfo"),
                         parking.getInt("totalCapacity"),
-                        parking.getJSONObject("parkingStatus").getInt("availableCapacity"));
+                        parking.getJSONObject("parkingStatus").getInt("availableCapacity"),
+                        fragment.getLatitude(),
+                        fragment.getLongitude());
                 System.out.println(newParking.getName() + ": " + newParking.getAvailableCapacity());
                 main.parkings.add(newParking);
             }
@@ -95,5 +147,6 @@ public class HelperFunctions {
         }
         return false;
     }
+
 
 }
