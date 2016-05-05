@@ -119,4 +119,5 @@ public class ParkingAdapter extends BaseAdapter implements DialogInterface.OnCli
             sct.onItemClick(mPosition);
         }
     }
+
 }

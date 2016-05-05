@@ -64,7 +64,7 @@ public class HelperFunctions {
 
     public boolean InitialCast(JSONArray jsonArray) throws JSONException{
         if(jsonArray != null) {
-            main.parkings = new ArrayList<Parking>();
+            main.parkings = new ArrayList<>();
             for(int i = 0; i < jsonArray.length(); i++) {
                 JSONObject parking = jsonArray.getJSONObject(i);
                 Parking newParking = new Parking(parking.getString("description"),
@@ -84,8 +84,13 @@ public class HelperFunctions {
         if(jsonArray != null) {
             for(int i = 0; i < jsonArray.length(); i++) {
                 JSONObject parking = jsonArray.getJSONObject(i);
-                main.parkings.get(i).updateCapacity(parking.getJSONObject("parkingStatus").getInt("availableCapacity"));
-                System.out.println(main.parkings.get(i).getName() + ": " + main.parkings.get(i).getAvailableCapacity());
+                String name = parking.getString("description");
+                for(int j = 0; j < main.parkings.size(); j++) {
+                    if(name.equals(main.parkings.get(j).getName())) {
+                        main.parkings.get(j).updateCapacity(parking.getJSONObject("parkingStatus").getInt("availableCapacity"));
+                        System.out.println(main.parkings.get(i).getName() + ": " + main.parkings.get(i).getAvailableCapacity());
+                    }
+                }
             }
         }
         return false;

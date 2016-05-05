@@ -12,6 +12,8 @@ import android.widget.ListView;
 
 import org.json.JSONException;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,7 +25,12 @@ public class MainFragment extends Fragment {
     public MainActivity main = null;
     HelperFunctions helper;
     private Timer autoUpdate;
-
+    private Comparator<Parking> comparator = new Comparator<Parking>() {
+        @Override
+        public int compare(Parking p1, Parking p2) {
+            return p1.getName().compareTo(p2.getName());
+        }
+    };
 
     public MainFragment() {
         // Required empty public constructor
@@ -65,6 +72,7 @@ public class MainFragment extends Fragment {
             Log.e("VIEW", e.getMessage());
         }
         while(main.adapter == null) {}
+        orderParkings();
         lv.setAdapter(main.adapter);
     }
 
@@ -76,6 +84,7 @@ public class MainFragment extends Fragment {
             @Override
             public void run() {
                 new updateRequest().execute();
+                orderParkings();
                 main.updateAdapter();
             }
         }, 0, 4000);
@@ -86,6 +95,11 @@ public class MainFragment extends Fragment {
     public void onPause() {
         autoUpdate.cancel();
         super.onPause();
+    }
+
+    private void orderParkings() {
+        //TODO: if (location available) order by distance; else order alphabetically
+        Collections.sort(main.parkings, comparator);
     }
 
     class initialRequest extends AsyncTask<Void, Void, Boolean> {
