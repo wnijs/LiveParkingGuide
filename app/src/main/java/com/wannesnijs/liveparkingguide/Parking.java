@@ -23,6 +23,8 @@ public class Parking {
         this.contact = contact;
         this.totalCapacity = totalCapacity;
         this.availableCapacity = availableCapacity;
+
+        // Calculate the distance between the parking and the passed user location
         float[] distance = new float[3];
         Location.distanceBetween(latitude, longitude, userLatitude, userLongitude, distance);
         userDistance = distance[0];

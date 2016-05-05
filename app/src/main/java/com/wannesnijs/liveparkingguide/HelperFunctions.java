@@ -49,6 +49,7 @@ public class HelperFunctions {
         initLocationService(main.context);
     }
 
+    // initializes the location service
     private void initLocationService(final Context context) {
         locationListener = new LocationListener() {
             @Override
@@ -66,6 +67,7 @@ public class HelperFunctions {
             public void onProviderDisabled(String provider) {}
         };
 
+        // Check if the app has permission to access gps data; requests it if not
         if (Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -86,6 +88,7 @@ public class HelperFunctions {
         }
     }
 
+    // Requests the JSON data from the server, returns JSONArray containing all parkings
     public JSONArray makeRequest() {
         StringBuilder builder = new StringBuilder();
         try {
@@ -112,6 +115,7 @@ public class HelperFunctions {
         return null;
     }
 
+    // Initializes the ArrayList of Parkings from JSONArray containing parking data
     public boolean InitialCast(JSONArray jsonArray) throws JSONException{
         if(jsonArray != null) {
             main.parkings = new ArrayList<>();
@@ -132,6 +136,8 @@ public class HelperFunctions {
         return false;
     }
 
+    // Adjusts available parking spaces of Parkings in the ArrayList from JSONArray containing
+    // parking data
     public boolean UpdateCast(JSONArray jsonArray) throws JSONException{
         if(jsonArray != null) {
             for(int i = 0; i < jsonArray.length(); i++) {
@@ -147,6 +153,4 @@ public class HelperFunctions {
         }
         return false;
     }
-
-
 }

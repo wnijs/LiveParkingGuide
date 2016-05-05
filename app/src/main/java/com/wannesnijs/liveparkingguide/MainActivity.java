@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         fragmentManager = getSupportFragmentManager();
 
+        // Load the initial list fragment
         MainFragment mainFragment = new MainFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mainFragment).commit();
     }
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ParkingAdapter(main, parkings, getResources(), context);
     }
 
+    //starts new DetailFragment for a Parking when a list item is clicked
     public void onItemClick(int mPosition) {
         Parking temp = parkings.get(mPosition);
         System.out.println(temp.getName() + " clicked");
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    // Notifies the ParkingAdapter that the data might have changed
     public void updateAdapter() {
         runOnUiThread(new Runnable() {
             @Override
@@ -58,5 +61,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }

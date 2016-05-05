@@ -12,12 +12,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.Map;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +24,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 
     private Parking parking;
     MapView mapView;
-    GoogleMap map;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -43,6 +38,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         parking = main.parkings.get(position);
     }
 
+    // Fills all the fields of the fragment and returns the view
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,6 +54,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         TextView contact = (TextView) view.findViewById(R.id.detail_contact);
         contact.setText(parking.getContact());
 
+        // Get the mapview and load the map asynchronously
         mapView = (MapView) view.findViewById(R.id.mapview);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -67,7 +64,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        googleMap = googleMap;
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         LatLng location = new LatLng(parking.getLatitude(),parking.getLongitude());
         googleMap.addMarker(new MarkerOptions().position(location));

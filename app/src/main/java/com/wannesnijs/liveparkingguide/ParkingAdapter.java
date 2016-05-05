@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -26,7 +25,6 @@ public class ParkingAdapter extends BaseAdapter implements DialogInterface.OnCli
     private Resources res;
     private Context context;
     Parking temp = null;
-    int i = 0;
 
     public ParkingAdapter(Activity a, ArrayList<Parking> d, Resources resLocal, Context c) {
         activity = a;
@@ -58,6 +56,7 @@ public class ParkingAdapter extends BaseAdapter implements DialogInterface.OnCli
         public TextView spaces;
     }
 
+    // Returns the view for the list item at a given position
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
@@ -86,7 +85,9 @@ public class ParkingAdapter extends BaseAdapter implements DialogInterface.OnCli
             // Set Model values in Holder elements
             holder.name.setText(temp.getName());
             holder.spaces.setText("" + temp.getAvailableCapacity());
-            int color = 0;
+
+            // Determine the color of the number, based on the number of available spaces
+            int color;
             if(temp.getAvailableCapacity() >= 50) color = ContextCompat.getColor(context, R.color.green);
             else if(temp.getAvailableCapacity() >= 10) color = ContextCompat.getColor(context, R.color.yellow);
             else if(temp.getAvailableCapacity() > 0) color = ContextCompat.getColor(context, R.color.orange);
@@ -94,7 +95,6 @@ public class ParkingAdapter extends BaseAdapter implements DialogInterface.OnCli
             holder.spaces.setTextColor(color);
 
             // Set Item Click Listener for LayoutInflater for each row
-
             vi.setOnClickListener(new OnItemClickListener(position));
         }
         return vi;
@@ -105,6 +105,7 @@ public class ParkingAdapter extends BaseAdapter implements DialogInterface.OnCli
         Log.v("ParkingAdapter", "Row clicked");
     }
 
+    // Detects when user clicks an item, passes to the onItemClick()-method of the main activity
     private class OnItemClickListener implements View.OnClickListener {
         private int mPosition;
 
@@ -119,5 +120,4 @@ public class ParkingAdapter extends BaseAdapter implements DialogInterface.OnCli
             sct.onItemClick(mPosition);
         }
     }
-
 }
