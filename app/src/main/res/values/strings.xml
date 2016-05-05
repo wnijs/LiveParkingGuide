@@ -3,7 +3,8 @@
 
     <string name="url">http://datatank.stad.gent/4/mobiliteit/bezettingparkingsrealtime.json</string>
 
-    <string name="available_tag">" available parking spaces"</string>
+    <string name="no_name">"no name"</string>
+    <string name="available_tag">%d available parking spaces</string>
     <string name="address_tag">Address:</string>
     <string name="contact_tag">Contact details:</string>
 </resources>

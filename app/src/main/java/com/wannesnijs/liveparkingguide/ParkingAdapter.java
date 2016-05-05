@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,14 +23,16 @@ public class ParkingAdapter extends BaseAdapter implements DialogInterface.OnCli
     private Activity activity;
     private ArrayList<Parking> data;
     private static LayoutInflater inflater = null;
-    public Resources res;
+    private Resources res;
+    private Context context;
     Parking temp = null;
     int i = 0;
 
-    public ParkingAdapter(Activity a, ArrayList<Parking> d, Resources resLocal) {
+    public ParkingAdapter(Activity a, ArrayList<Parking> d, Resources resLocal, Context c) {
         activity = a;
         data = d;
         res = resLocal;
+        context = c;
 
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -74,7 +77,7 @@ public class ParkingAdapter extends BaseAdapter implements DialogInterface.OnCli
         } else holder = (ViewHolder) vi.getTag();
 
         if(data.size() <= 0) {
-            holder.name.setText("No name");
+            holder.name.setText(res.getString(R.string.no_name));
         } else {
             // Get each Model object from Arraylist
             temp = null;
@@ -83,6 +86,12 @@ public class ParkingAdapter extends BaseAdapter implements DialogInterface.OnCli
             // Set Model values in Holder elements
             holder.name.setText(temp.getName());
             holder.spaces.setText("" + temp.getAvailableCapacity());
+            int color = 0;
+            if(temp.getAvailableCapacity() >= 50) color = ContextCompat.getColor(context, R.color.green);
+            else if(temp.getAvailableCapacity() >= 10) color = ContextCompat.getColor(context, R.color.yellow);
+            else if(temp.getAvailableCapacity() > 0) color = ContextCompat.getColor(context, R.color.orange);
+            else color = ContextCompat.getColor(context, R.color.red);
+            holder.spaces.setTextColor(color);
 
             // Set Item Click Listener for LayoutInflater for each row
 

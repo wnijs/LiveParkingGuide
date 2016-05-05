@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void newAdapter() {
-        adapter = new ParkingAdapter(main, parkings, getResources());
+        adapter = new ParkingAdapter(main, parkings, getResources(), context);
     }
 
     public void onItemClick(int mPosition) {

@@ -50,8 +50,9 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         TextView name = (TextView) view.findViewById(R.id.detail_name);
         name.setText(parking.getName());
+        String temp = String.format(main.getResources().getString(R.string.available_tag), parking.getAvailableCapacity());
         TextView spaces = (TextView) view.findViewById(R.id.detail_spaces);
-        spaces.setText(parking.getAvailableCapacity() + getString(R.string.available_tag));
+        spaces.setText(temp);
         TextView address = (TextView) view.findViewById(R.id.detail_address);
         address.setText(parking.getAddress());
         TextView contact = (TextView) view.findViewById(R.id.detail_contact);
